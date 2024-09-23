@@ -1,0 +1,178 @@
+{
+  "zabbix_export": {
+    "version": "7.0",
+    "templates": [
+      {
+        "uuid": "a926dd704e0444459684269de04083d2",
+        "template": "Template Server Monitoring",
+        "name": "Template Server Monitoring",
+        "description": "Template to monitor CPU, memory, disk, network, processes, logs, and security aspects of a server.",
+        "groups": [
+          {
+            "name": "Templates/Operating systems"
+          }
+        ],
+        "items": [
+          {
+            "uuid": "31d587e7e0f84c13ad86e54a159052ad",
+            "name": "CPU Load (1 min average)",
+            "key": "system.cpu.load[all,avg1]",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "CPU"
+              }
+            ],
+            "triggers": [
+              {
+                "uuid": "48249d089f914e7aa7d4a455ae7c9e58",
+                "name": "CPU Load Usage",
+                "description": "CPU load is too high ( > 5)",
+                "expression": "last(/Template Server Monitoring/system.cpu.load[all,avg1])>5",
+                "priority": "HIGH",
+                "tags": [
+                  {
+                    "tag": "Category",
+                    "value": "CPU"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "uuid": "bb5188e36c054140b404843dc2867532",
+            "name": "CPU Utilization (user)",
+            "key": "system.cpu.util[,user]",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "CPU"
+              }
+            ]
+          },
+          {
+            "uuid": "f8e58b128e44420da6294d31d0317c0e",
+            "name": "Memory Usage (Used)",
+            "key": "vm.memory.size[used]",
+            "units": "B",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Memory"
+              }
+            ]
+          },
+          {
+            "uuid": "fac2465e5abf4664923dbd32a00e8469",
+            "name": "Swap Usage",
+            "key": "system.swap.size[,used]",
+            "units": "B",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Memory"
+              }
+            ]
+          },
+          {
+            "uuid": "d8af622835ef4facba641dbf5b68b3bd",
+            "name": "Disk Space Usage (root)",
+            "key": "vfs.fs.size[/,used]",
+            "units": "B",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Disk"
+              }
+            ]
+          },
+          {
+            "uuid": "de79dee65b81459cb7703866448662b2",
+            "name": "Network Traffic In (eth0)",
+            "key": "net.if.in[eth0]",
+            "units": "Bps",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Network"
+              }
+            ]
+          },
+          {
+            "uuid": "58cd2aa1cc3a41c9ba6a33c64fed691f",
+            "name": "Network Traffic Out (eth0)",
+            "key": "net.if.out[eth0]",
+            "units": "Bps",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Network"
+              }
+            ]
+          },
+          {
+            "uuid": "213bc4ff356946a88657363427068f68",
+            "name": "Total Process Count",
+            "key": "proc.num[]",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Processes"
+              }
+            ],
+            "triggers": [
+              {
+                "uuid": "d1f8c75ee9944b0589d935b6b03300c1",
+                "name": "Measure processes running",
+                "description": "Too many processes running ( > 300)",
+                "expression": "last(/Template Server Monitoring/proc.num[])>300",
+                "priority": "AVERAGE",
+                "tags": [
+                  {
+                    "tag": "Category",
+                    "value": "Processes"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "uuid": "a93382211482416cb48bb148f1f90384",
+            "name": "Failed Login Attempts",
+            "key": "log[/var/log/auth.log,authentication failure]",
+            "delay": "60s",
+            "tags": [
+              {
+                "tag": "Category",
+                "value": "Security"
+              }
+            ],
+            "triggers": [
+              {
+                "uuid": "29cd591af73c4770b4755891dcd2f1f9",
+                "name": "Login attempts",
+                "description": "Too many failed login attempts",
+                "expression": "count(/Template Server Monitoring/log[/var/log/auth.log,authentication failure], 5m)>5",
+                "priority": "HIGH",
+                "tags": [
+                  {
+                    "tag": "Category",
+                    "value": "Security"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
